@@ -3,6 +3,8 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\QueueController;
+use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\PatientController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -16,4 +18,7 @@ Route::middleware('handle.expired.tokens')->group(function () {
     Route::post('appointments/{appointment}/queue/join', [QueueController::class, 'joinQueue']);
     Route::post('appointments/{appointment}/queue/call-next', [QueueController::class, 'callNext']);
     Route::get('appointments/{appointment}/queue/position', [QueueController::class, 'getCurrentPosition']);
+    // API Routes
+    Route::apiResource('doctors', DoctorController::class);
+    Route::apiResource('patients', PatientController::class);
 });
