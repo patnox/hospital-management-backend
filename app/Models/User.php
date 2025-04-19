@@ -40,4 +40,19 @@ class User extends Authenticatable
     {
         return $this->hasManyThrough(Appointment::class, Doctor::class, 'user_id', 'doctor_id');
     }
+
+    public function hasRole($role)
+    {
+        return $this->role === $role;
+    }
+
+    public function hasAnyRole($roles)
+    {
+        if (!is_array($roles)) {
+            $roles = [$roles];
+        }
+        // Convert to Collection for contains() method
+        $rolesCollection = collect($roles);
+        return $rolesCollection->contains($this->role);
+    }
 }
