@@ -1,64 +1,250 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Hospital Management System
+A comprehensive hospital management system built with Laravel 8, Vue.js 3, and MySQL.
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Table of Contents
+1. [System Requirements](#system-requirements)
+2. [Installation](#installation)
+   - [Debian-based Systems](#debian-based-systems)
+   - [RedHat-based Systems](#redhat-based-systems)
+3. [Configuration](#configuration)
+   - [Apache Configuration](#apache-configuration)
+   - [MySQL Configuration](#mysql-configuration)
+   - [PHP Configuration](#php-configuration)
+4. [Deployment Steps](#deployment-steps)
+5. [Security Considerations](#security-considerations)
+6. [Troubleshooting](#troubleshooting)
 
-## About Laravel
+## System Requirements
+- PHP 8.0 or higher
+- MySQL 8.0 or higher
+- Apache 2.4 or higher
+- Node.js 14 or higher
+- npm 6 or higher
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Installation
+### Debian-based Systems
+```bash
+# Update system
+sudo apt update && sudo apt upgrade -y
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+# Install PHP and required extensions
+sudo apt install -y php8.0-fpm php8.0-mysql php8.0-curl php8.0-gd php8.0-mbstring php8.0-xml php8.0-zip
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+# Install MySQL
+sudo apt install -y mysql-server
 
-## Learning Laravel
+# Install Node.js
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt install -y nodejs
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+# Install npm packages
+npm install
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### RedHat-based Systems
+```bash
+# Update system
+sudo dnf update -y
 
-## Laravel Sponsors
+# Install PHP and required extensions
+sudo dnf install -y php-fpm php-mysqlnd php-opcache php-gd php-mbstring php-xml php-zip
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+# Install MySQL
+sudo dnf install -y mysql-server
 
-### Premium Partners
+# Install Node.js
+curl -fsSL https://rpm.nodesource.com/setup_lts.x | sudo -E bash -
+sudo dnf install -y nodejs
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+# Install npm packages
+npm install
+```
 
-## Contributing
+## Configuration
+### Apache Configuration
+Create a new Apache configuration file:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+sudo nano /etc/apache2/sites-available/hospital.conf
+```
 
-## Code of Conduct
+Add the following configuration:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```apache
+<VirtualHost *:80>
+    ServerName yourdomain.com
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/hospital/public
 
-## Security Vulnerabilities
+    <Directory /var/www/hospital/public>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride All
+        Require all granted
+    </Directory>
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+    ErrorLog ${APACHE_LOG_DIR}/hospital_error.log
+    CustomLog ${APACHE_LOG_DIR}/hospital_access.log combined
+</VirtualHost>
+```
 
-## License
+Enable the configuration:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+sudo a2ensite hospital.conf
+sudo a2dissite 000-default.conf
+sudo systemctl restart apache2
+```
+
+### MySQL Configuration
+Configure MySQL:
+
+```bash
+sudo mysql_secure_installation
+```
+
+Create database and user:
+
+```sql
+CREATE DATABASE hospital_management CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'hospital_user'@'localhost' IDENTIFIED BY 'your_strong_password';
+GRANT ALL PRIVILEGES ON hospital_management.* TO 'hospital_user'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+### PHP Configuration
+Update PHP configuration:
+
+```bash
+sudo nano /etc/php/8.0/fpm/php.ini
+```
+
+Adjust these settings:
+
+```ini
+upload_max_filesize = 40M
+post_max_size = 40M
+memory_limit = 512M
+max_execution_time = 300
+```
+
+Restart PHP-FPM:
+
+```bash
+sudo systemctl restart php8.0-fpm
+```
+
+## Deployment Steps
+1. Clone the repository:
+```bash
+git clone https://your-repository-url.com/hospital-management.git
+cd hospital-management
+```
+
+2. Install dependencies:
+```bash
+composer install --optimize-autoloader --no-dev
+npm install --production
+npm run build
+```
+
+3. Configure environment:
+```bash
+cp .env.example .env
+nano .env
+```
+
+Update environment variables:
+```makefile
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://yourdomain.com
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=hospital_management
+DB_USERNAME=hospital_user
+DB_PASSWORD=your_strong_password
+
+SESSION_DRIVER=cookie
+CACHE_DRIVER=file
+QUEUE_CONNECTION=sync
+```
+
+4. Run migrations:
+```bash
+php artisan migrate --force
+php artisan db:seed --class=HospitalDatabaseSeeder
+```
+
+5. Set permissions:
+```bash
+sudo chown -R www-data:www-data /var/www/hospital
+sudo chmod -R 755 /var/www/hospital/storage
+```
+
+## Security Considerations
+1. Enable SSL:
+```bash
+sudo certbot --apache
+```
+
+2. Configure firewall:
+```bash
+sudo ufw allow http
+sudo ufw allow https
+sudo ufw enable
+```
+
+3. Set up backup:
+```bash
+sudo crontab -e
+```
+
+Add daily backup:
+```bash
+0 2 * * * mysqldump -u hospital_user -p'your_strong_password' hospital_management > /var/backups/hospital_$(date +\%Y-\%m-\%d).sql
+```
+
+## Troubleshooting
+### Common Issues
+1. Permission errors:
+```bash
+sudo chown -R www-data:www-data /var/www/hospital
+sudo chmod -R 755 /var/www/hospital/storage
+```
+
+2. PHP errors:
+```bash
+sudo tail -f /var/log/apache2/hospital_error.log
+```
+
+3. Database connection:
+```bash
+mysql -u hospital_user -p hospital_management
+```
+
+4. Queue worker:
+```bash
+php artisan queue:work --tries=3
+```
+
+## Maintenance
+1. Update dependencies:
+```bash
+composer update --optimize-autoloader --no-dev
+npm update --production
+```
+
+2. Clear cache:
+```bash
+php artisan cache:clear
+php artisan config:clear
+php artisan view:clear
+```
+
+3. Monitor logs:
+```bash
+sudo tail -f /var/log/apache2/hospital_error.log
+sudo tail -f /var/log/mysql/error.log
+```
