@@ -70,4 +70,62 @@ class PatientController extends Controller
             'patient' => $patient
         ]);
     }
+
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users,email',
+            'medical_history' => 'sometimes|string',
+            'emergency_contact' => 'sometimes|string'
+        ]);
+
+        // Create user first
+        $user = User::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => bcrypt('password123'), // Change this in production
+            'role' => 'patient'
+        ]);
+
+        // Create patient record
+        Patient::create([
+            'user_id' => $user->id,
+            'medical_history' => $validatedData['medical_history'] ?? '',
+            'emergency_contact' => $validatedData['emergency_contact'] ?? ''
+        ]);
+
+        return response()->json(['message' => 'Patient created successfully']);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $patient = Patient::findOrFail($id);
+        
+        $validatedData = $request->validate([
+            'name' => 'sometimes|required|string',
+            'email' => 'sometimes|required|email|unique:users,email,' . $patient->user->id,
+            'medical_history' => 'sometimes|string',
+            'emergency_contact' => 'sometimes|string'
+        ]);
+
+        // Update user
+        $patient->user->update([
+            'name' => $validatedData['name'] ?? $patient->user->name,
+            'email' => $validatedData['email'] ?? $patient->user->email,
+        ]);
+
+        // Update patient
+        $patient->update([
+            'medical_history' => $validatedData['medical_history'] ?? $patient->medical_history,
+            'emergency_contact' => $validatedData['emergency_contact'] ?? $patient->emergency_contact
+        ]);
+
+        return response()->json(['message' => 'Patient updated successfully']);
+    }
+
+    public function destroy($id)
+    {
+        return Patient::destroy($id);
+    }
 }

@@ -5,6 +5,10 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\QueueController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AvailabilityController;
+use App\Http\Controllers\AppointmentsAdminController;
+use App\Http\Controllers\QueueAdminController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -22,4 +26,15 @@ Route::middleware('handle.expired.tokens', 'role:doctor,patient,admin')->group(f
     Route::apiResource('patients', PatientController::class);
     Route::get('/patients/user/{userId}', [PatientController::class, 'getByUserId']);
     Route::get('/doctors/user/{userId}', [DoctorController::class, 'getByUserId']);
+    // Route::apiResource('users', UserController::class);
+    // Route::apiResource('availability', AvailabilityController::class);
+    // Route::apiResource('appointmentsadmin', AppointmentsAdminController::class);
 });
+
+Route::middleware('handle.expired.tokens', 'role:admin')->group(function () {
+    Route::apiResource('users', UserController::class);
+    Route::apiResource('availability', AvailabilityController::class);
+    Route::apiResource('appointmentsadmin', AppointmentsAdminController::class);
+    Route::apiResource('queueadmin', QueueAdminController::class);
+});
+

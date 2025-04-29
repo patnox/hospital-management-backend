@@ -21,7 +21,7 @@ CREATE TABLE `users` (
 
 -- Doctors table (extends users)
 CREATE TABLE doctors (
-    id BIGINT UNSIGNED PRIMARY KEY,
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT UNSIGNED UNIQUE,
     specialization VARCHAR(100),
     department VARCHAR(100),
@@ -32,7 +32,7 @@ CREATE TABLE doctors (
 
 -- Patients table (extends users)
 CREATE TABLE patients (
-    id BIGINT UNSIGNED PRIMARY KEY,
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT UNSIGNED UNIQUE,
     medical_history TEXT,
     emergency_contact VARCHAR(255),
